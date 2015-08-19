@@ -1,12 +1,12 @@
 puts 'if any of coefficient is negative use minus "-" before its value'
 print 'enter A from ax**2: '
-a = gets.to_i
+a = gets.to_f
 
 print 'enter B from bx: '
-b = gets.to_i
+b = gets.to_f
 
 print 'enter C: '
-c = gets.to_i
+c = gets.to_f
 
 discriminant = b**2 - 4*a*c
 puts "Discriminant #{discriminant}"
