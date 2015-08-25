@@ -1,20 +1,20 @@
 year2015 = {
-	:jan => (1..31),
-	:feb => (1..28),
-	:mar => (1..31),
-	:apr => (1..30),
-	:may => (1..31),
-	:jun => (1..30),
-	:jul => (1..31),
-	:aug => (1..31),
-	:sep => (1..30),
-	:oct => (1..31),
-	:nov => (1..30),
-	:dec => (1..31)
+	:jan => 31,
+	:feb => 28,
+	:mar => 31,
+	:apr => 30,
+	:may => 31,
+	:jun => 30,
+	:jul => 31,
+	:aug => 31,
+	:sep => 30,
+	:oct => 31,
+	:nov => 30,
+	:dec => 31
 }
 
-year2015.each do |name, month|
-	if ( month.size == 30 )
-		puts name, month
+year2015.each do |name, days|
+	if ( days == 30 )
+		puts name, days
 	end
 end

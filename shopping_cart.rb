@@ -1,30 +1,34 @@
 items_list = {}
 total_summ = 0
 
-begin
+loop do
   print 'Введите название товара '
   item_name = gets.chomp.downcase
   
-  #зачем остальное если пользователь ввёл stop
-  if( 'stop' != item_name )
-    print 'Введите количество заказанного товара ' 
-    item_count = gets.chomp.to_f
-    
-    print 'Введите цену товара '
-    price = gets.chomp.to_f
-    
-    items_list[ item_name ] = { 
-      :item_count => item_count, 
-      :price      => price 
-    }
-    
-    current_summ = item_count * price;
-    total_summ += current_summ
-    puts "Позиция #{item_name}, цена (с учётом количества) = #{current_summ}"
-    
-  end
+  break if item_name == 'stop'
   
-end until ('stop' == item_name || 'стоп' == item_name )
+  #зачем остальное если пользователь ввёл stop
+  print 'Введите количество заказанного товара ' 
+  item_count = gets.chomp.to_f
+  
+  print 'Введите цену товара '
+  price = gets.chomp.to_f
+  
+  items_list[ item_name ] = { 
+    :item_count => item_count, 
+    :price      => price 
+  }
+    
+end
+
+total_summ = 0;
+items_list.map{| name, params|
+  
+  current_summ = params[:item_count] * params[:price];
+  total_summ += current_summ
+  puts "Позиция #{name}, цена (с учётом количества) = #{current_summ}"
+  
+}
 
 puts "Итого #{total_summ}"
 
