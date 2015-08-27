@@ -6,6 +6,8 @@
 Может выводить список всех станций по-порядку от начальной до конечной
 =end
 
+require_relative 'RailwayStation'
+
 class Route
 
   attr_accessor :stations_list
