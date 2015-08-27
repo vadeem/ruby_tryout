@@ -20,55 +20,94 @@ class Train
   TRAIN_TYPE = [ :passenger, :freight ]
   SPEED_CHANGE_VALUE = 10 #ускорение поезда, км\ч
   
-	attr_reader		:train_number, :type, :wagons_count
-	attr_accessor :route
-	
-	private
-	attr_accessor :speed
-	attr_writer   :wagons_count
-	
-	
-	public
-  def initialize( route = 'zaglushka', wagons = 1, train_type = :passenger)
+  attr_reader	:number, :type, :wagons_count
+  attr_accessor :speed, :route, :current_station
+  attr_writer   :wagons_count
+  
+  def initialize( wagons = 1, train_type = :passenger, route = nil)
     
     @type = train_type
     @wagons_count = wagons
     @speed = 0
-    @train_number = self.object_id
-    #@route = Route.new(route);
-    
-	end
- 
-	def speed_up
+    @number = self.object_id
+    @route = route
+    @current_station = route.get_route_start if route != nil #завожу для экономии времени на процедуру перебора всех станций 
+  end
+  
+  def set_route( route )
+	self.route = route
+	self.route.get_route_start.accept_train(self)
+	self.current_station = self.route.get_route_start
+  end
+
+  def speed_up
     self.speed += SPEED_CHANGE_VALUE 
-	end
+  end
 	
-	def show_current_speed
-    puts "Скорость поезда №#{self.train_number}: #{self.speed} км\ч"
-	end
-	
-	def slow_down
+  def show_current_speed
+    puts "Скорость поезда №#{self.number}: #{self.speed} км\ч" 
+  end
+
+  def slow_down
     self.speed -= SPEED_CHANGE_VALUE
-	end
+  end
 
-	def show_current_station
-    puts "Поезд №#{self.train_number} находится на станции #{self.route.current_station}"
-	end
+  def show_current_station
+  	
+  	if( self.route.nil? )
+		puts 'Поезд не имеет маршрутного листа'
+  	else
+  		puts "Поезд №#{self.number} находится на станции #{self.current_station.name}"
+  	end
+  end
 
-	def travel_next_station
+  def travel_next_station
+  	if( self.route.nil? )
+		puts 'Необходимо завести путевой лист (маршрут)'
+	else
+		last_station = self.route.get_route_end
 		
-	end
+		if self.current_station == last_station 
+			puts 'Поезд на конечной'
+		else
+			self.current_station.train_departure(self)
+			cur_station_index = self.route.stations_list.index( self.current_station )
+			
+			#следующая станция
+			self.current_station = self.route.stations_list.at(cur_station_index + 1)
+			self.current_station.accept_train( self )
+		end
+  	end
+  end
 
-	def travel_back_to_last_station
+  def travel_back_to_last_station
+	if( self.route.nil? )
+		puts 'Необходимо завести путевой лист (маршрут)'
+	else
+		first_station = self.route.get_route_start
 		
-	end
+		if self.current_station == first_station 
+			puts 'Поезд уже в начале маршрута'
+		else
+			self.current_station.train_departure(self)
+			cur_station_index = self.route.stations_list.index( self.current_station )
+			
+			#следующая станция
+			self.current_station = self.route.stations_list.at(cur_station_index - 1)
+			self.current_station.accept_train( self )
+		end
+  	end
+  end
 
-	def add_wagon
+  def add_wagon
     self.wagons_count += 1;
-	end
+  end
 
-	def remove_wagon
+  def remove_wagon
     self.wagons_count -= 1;
-	end
+  end
 
+  def show_train_stations
+  	self.route.show_sorted_stations_list
+  end
 end
