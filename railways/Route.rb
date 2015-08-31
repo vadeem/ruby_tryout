@@ -50,9 +50,4 @@ class Route
     	
     }
   end
-  
-  def nil?
-  	false
-  end
-
 end

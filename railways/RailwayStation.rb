@@ -18,9 +18,9 @@ class RailwayStation
   
   	def show_trains( type=nil )
   		no_trains = true
-  		if( self.trains_list.any? )
+  		if self.trains_list.any?
 			self.trains_list.each { |train_id, train|
-				if( type.nil? )
+				if type.nil? 
 					puts train_id
 				elsif( train.type == type)
 					no_trains = false
@@ -29,7 +29,7 @@ class RailwayStation
 			}
     	end
     	
-    	puts 'no trains at station now' if (no_trains && type != nil)
+    	puts 'no trains at station now' if no_trains && ! type.nil?
   	end
 
 	def train_departure( train )
@@ -38,7 +38,7 @@ class RailwayStation
 	end
 
 	def has_train?( train_id )
-		if( self.trains_list[train_id] != nil )
+		if self.trains_list[train_id]
 			true
 		else
 			false
@@ -46,10 +46,9 @@ class RailwayStation
 	end
 	
 	def accept_train( train )
-		if( self.trains_list[train.number] == nil )
+		unless self.trains_list[train.number]
 			self.trains_list[train.number] = train
 			puts "Поезд №#{train.number} прибыл на станцию #{self.name}"
-			
 		else
 			self.trains_list[train.number]
 			puts "Поезд №#{train.number} уже находится на станции #{self.name}"

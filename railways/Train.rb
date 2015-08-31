@@ -31,7 +31,7 @@ class Train
     @speed = 0
     @number = self.object_id
     @route = route
-    @current_station = route.get_route_start if route != nil #завожу для экономии времени на процедуру перебора всех станций 
+    @current_station = route.get_route_start if route.any? #завожу для экономии времени на процедуру перебора всех станций 
   end
   
   def set_route( route )
@@ -100,11 +100,19 @@ class Train
   end
 
   def add_wagon
-    self.wagons_count += 1;
+  	if ! self.speed
+    	self.wagons_count += 1;
+    else
+    	puts 'Состав в движении, невозможно прицепить вагон на ходу'
+    end
   end
 
   def remove_wagon
-    self.wagons_count -= 1;
+  	if ! self.speed
+    	self.wagons_count -= 1;
+    else
+    	puts 'Состав в движении, невозможно отцепить вагон на ходу'
+    end
   end
 
   def show_train_stations
