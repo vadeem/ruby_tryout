@@ -1,43 +1,36 @@
-=begin
-Поезд:
-Имеет, тип, который указывается при создании: грузовой, пассажирский и количество вагонов.
-Поезд может делать следующие вещи:
-набирать скорость
-показывать текущую скорость
-тормозить
-показывать количество вагонов
-прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов). 
-Прицепка/отцепка вагонов может осуществляться только если поезд не движется.
-Принимать маршрут следования
-Перемещаться между станциями, указанными в маршруте.
-Показывать предыдущую станцию, текущую, следующую, на основе маршрута
-=end
 require_relative 'Route'
+require_relative 'PassengerCar'
+require_relative 'CargoCar'
 
 class Train
 
   #варианты типа поезда
-  TRAIN_TYPE = [ :passenger, :freight ]
+  TRAIN_TYPE = { :passenger => 'Passenger', :freight => 'Cargo' }
   SPEED_CHANGE_VALUE = 10 #ускорение поезда, км\ч
   
-  attr_reader	:number, :type, :wagons_count
-  attr_accessor :speed, :route, :current_station
-  attr_writer   :wagons_count
+  attr_reader	:route, :number, :speed, :type, :wagons_list
   
-  def initialize( wagons = 1, train_type = :passenger, route = nil)
+  protected #протектед т.к. нам нужно чтобы к этим полям имели доступ классы наследники, но при этом нельзя было напрямую получить доступ к переменной
+  attr_accessor :current_station
+  attr_writer   :route, :wagons_list, :speed
+
+  private #приватный так как этот класс для нас абстрактный, т.е. мы не позволяем создавать его экземпляры, только наследники.
+  def initialize( train_type = nil, route = nil, wagons_list = {})
     
     @type = train_type
-    @wagons_count = wagons
+    @wagons_list = wagons_list
     @speed = 0
     @number = self.object_id
     @route = route
-    @current_station = route.get_route_start if route.any? #завожу для экономии времени на процедуру перебора всех станций 
+    @current_station = route.get_route_start unless route.nil? #завожу для экономии времени на процедуру перебора всех станций
+     
   end
   
+  public
   def set_route( route )
-	self.route = route
-	self.route.get_route_start.accept_train(self)
-	self.current_station = self.route.get_route_start
+  	self.route = route
+  	self.route.get_route_start.accept_train(self)
+  	self.current_station = self.route.get_route_start
   end
 
   def speed_up
@@ -63,53 +56,61 @@ class Train
 
   def travel_next_station
   	if( self.route.nil? )
-		puts 'Необходимо завести путевой лист (маршрут)'
-	else
-		last_station = self.route.get_route_end
-		
-		if self.current_station == last_station 
-			puts 'Поезд на конечной'
-		else
-			self.current_station.train_departure(self)
-			cur_station_index = self.route.stations_list.index( self.current_station )
-			
-			#следующая станция
-			self.current_station = self.route.stations_list.at(cur_station_index + 1)
-			self.current_station.accept_train( self )
-		end
+  		puts 'Необходимо завести путевой лист (маршрут)'
+  	else
+  		last_station = self.route.get_route_end
+  		
+  		if self.current_station == last_station 
+  			puts 'Поезд на конечной'
+  		else
+  			self.current_station.train_departure(self)
+  			#следующая станция
+  			self.current_station = self.route.get_next_station( self.current_station )
+  			self.current_station.accept_train( self )
+  		end
   	end
   end
 
-  def travel_back_to_last_station
-	if( self.route.nil? )
-		puts 'Необходимо завести путевой лист (маршрут)'
-	else
-		first_station = self.route.get_route_start
-		
-		if self.current_station == first_station 
-			puts 'Поезд уже в начале маршрута'
-		else
-			self.current_station.train_departure(self)
-			cur_station_index = self.route.stations_list.index( self.current_station )
-			
-			#следующая станция
-			self.current_station = self.route.stations_list.at(cur_station_index - 1)
-			self.current_station.accept_train( self )
-		end
+  def travel_to_last_station
+  	if( self.route.nil? )
+  		puts 'Необходимо завести путевой лист (маршрут)'
+  	else
+  		first_station = self.route.get_route_start
+  		
+  		if self.current_station == first_station 
+  			puts 'Поезд уже в начале маршрута'
+  		else
+  			self.current_station.train_departure(self)
+
+  			#предыдущая станция
+  			self.current_station = self.route.get_prev_station( self.current_station )
+  			self.current_station.accept_train( self )
+  		end
   	end
   end
 
+=begin  
   def add_wagon
-  	if ! self.speed
-    	self.wagons_count += 1;
-    else
-    	puts 'Состав в движении, невозможно прицепить вагон на ходу'
+    #уточнить по поводу вызова класса по имени
+      if 0 == self.speed
+        car_class_name = self.type + 'Car'
+        Object.const_get(car_class_name)
+        wagon = Object.const_get(car_class_name).new();
+        wagons_list[wagon.number] = wagon;
+      else
+        puts 'Состав в движении, невозможно прицепить вагон на ходу'
+      end
     end
   end
+=end
 
-  def remove_wagon
-  	if ! self.speed
-    	self.wagons_count -= 1;
+  def remove_wagon(number = nil)
+  	if 0 == self.speed && self.wagons_list.any?
+  		if number.nil?
+    		wagons_list.shift;
+    	else
+    		wagons_list.delete(number){ |el| "Вагона №#{el} в составе нет" };
+    	end
     else
     	puts 'Состав в движении, невозможно отцепить вагон на ходу'
     end
