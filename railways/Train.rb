@@ -9,12 +9,7 @@ class Train
   SPEED_CHANGE_VALUE = 10 #ускорение поезда, км\ч
   
   attr_reader	:route, :number, :speed, :type, :wagons_list
-  
-  protected #протектед т.к. нам нужно чтобы к этим полям имели доступ классы наследники, но при этом нельзя было напрямую получить доступ к переменной
-  attr_accessor :current_station
-  attr_writer   :route, :wagons_list, :speed
 
-  private #приватный так как этот класс для нас абстрактный, т.е. мы не позволяем создавать его экземпляры, только наследники.
   def initialize( train_type = nil, route = nil, wagons_list = {})
     
     @type = train_type
@@ -26,7 +21,6 @@ class Train
      
   end
   
-  public
   def set_route( route )
   	self.route = route
   	self.route.get_route_start.accept_train(self)
@@ -119,4 +113,9 @@ class Train
   def show_train_stations
   	self.route.show_sorted_stations_list
   end
+  
+  protected #протектед т.к. нам нужно чтобы к этим полям имели доступ классы наследники, но при этом нельзя было напрямую получить доступ к переменной
+  attr_accessor :current_station
+  attr_writer   :route, :wagons_list, :speed
+  
 end

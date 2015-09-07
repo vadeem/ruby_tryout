@@ -2,15 +2,9 @@ require_relative 'Train.rb'
 
 class PassengerTrain < Train
 
-  def initialize( train_type = :passenger, route = nil, wagons_list = {})
-      
-      @type = train_type
-      @wagons_list = wagons_list
-      @speed = 0
-      @number = self.object_id
-      @route = route
-      @current_station = route.get_route_start unless route.nil? #завожу для экономии времени на процедуру перебора всех станций
-       
+  def initialize
+    super
+    @type = :passenger
   end
   
   def add_wagon

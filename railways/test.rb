@@ -51,6 +51,7 @@ puts
 puts 'ПОЕЗДА: грузовой'
 tr = CargoTrain.new()
 puts tr
+puts tr.type
 
 tr.add_wagon
 puts tr.wagons_list
@@ -69,6 +70,7 @@ puts
 puts 'ПОЕЗДА:пассажирский'
 tr2 = PassengerTrain.new()
 puts tr2
+puts tr2.type
 
 tr2.add_wagon
 puts tr2.wagons_list

@@ -5,15 +5,11 @@ class PassengerCar < Car
 	
   AVAILABLE_FOR = :passenger # train
 	
-	attr_reader 	:number, :type, :boarding_places_count, :passengers_count
-	
-	private
-	attr_writer	  :passengers_count 
+	attr_reader 	:boarding_places_count, :passengers_count
 	
 	public
 	def initialize(boarding_places_count = 30)
-    @number                 = self.object_id
-		@type 					        = AVAILABLE_FOR 
+	  super
 		@passengers_count 		  = 0 
 		@boarding_places_count  = boarding_places_count
 	end
@@ -25,5 +21,8 @@ class PassengerCar < Car
 			self.passengers_count += 1
 		end
 	end
-	
+
+  private
+  attr_writer   :passengers_count 
+  
 end
