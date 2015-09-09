@@ -1,9 +1,16 @@
 require_relative 'Route'
 require_relative 'PassengerCar'
 require_relative 'CargoCar'
+require_relative 'Counter'
+require_relative 'InfoModifier'
+require_relative 'AllFinder'
 
 class Train
 
+  include InfoModifier
+  include Counter
+  include AllFinder
+  
   #варианты типа поезда
   TRAIN_TYPE = { :passenger => 'Passenger', :freight => 'Cargo' }
   SPEED_CHANGE_VALUE = 10 #ускорение поезда, км\ч
@@ -18,7 +25,8 @@ class Train
     @number = self.object_id
     @route = route
     @current_station = route.get_route_start unless route.nil? #завожу для экономии времени на процедуру перебора всех станций
-     
+    self.register_instance
+    self.add_one_instance(self)
   end
   
   def set_route( route )

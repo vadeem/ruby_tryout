@@ -1,4 +1,8 @@
+require_relative 'AllFinder'
+
 class RailwayStation
+  	
+  	include AllFinder
   	
 	attr_reader    :trains_list
 	attr_accessor  :name
@@ -6,6 +10,7 @@ class RailwayStation
 	def initialize( name )
 		@name = name
 		@trains_list = Hash.new(nil)
+		self.add_one_instance(self)
 	end
   
 	def show_trains( type=nil )
