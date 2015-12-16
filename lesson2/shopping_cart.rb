@@ -22,7 +22,7 @@ loop do
 end
 
 total_summ = 0;
-items_list.map{| name, params|
+items_list.each{| name, params|
   
   current_summ = params[:item_count] * params[:price];
   total_summ += current_summ

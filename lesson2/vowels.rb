@@ -1,9 +1,10 @@
 letters = ('a'..'z').to_a
+vowels = ['a','e','i','o','u']
 
 result = {}
 
 letters.each{ |letter|
-  if( ['a','e','i','o','u'].include? letter )
+  if( vowels.include? letter )
     result[ letter ] = letters.index(letter) + 1
   end
 }

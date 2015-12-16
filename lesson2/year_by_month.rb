@@ -14,7 +14,5 @@ year2015 = {
 }
 
 year2015.each do |name, days|
-	if ( days == 30 )
-		puts name, days
-	end
+  puts name, days if ( days == 30 )
 end
