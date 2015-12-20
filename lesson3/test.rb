@@ -1,6 +1,6 @@
-require_relative 'Route.rb'
-require_relative 'Train.rb'
-require_relative 'RailwayStation.rb'
+require_relative 'route.rb'
+require_relative 'train.rb'
+require_relative 'railway_station.rb'
 
 
 #станции
