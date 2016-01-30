@@ -24,9 +24,6 @@ puts RailwayStation.all
 puts 'найдём станциюю Монино, по её названию номеру - 12 '
 puts RailwayStation.find(12).name
 puts
-puts 'посмотрим сколько у нас всего станций'
-puts RailwayStation.instances
-puts
 
 #путь
 puts 'ПУТЬ'
