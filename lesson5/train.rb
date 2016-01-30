@@ -1,20 +1,29 @@
 require_relative 'route.rb'
 require_relative 'railway_station.rb'
+require_relative 'info_modifier.rb'
+require_relative 'all_finder.rb'
 
 class Train
 
+  include InfoModifier
+  include AllFinder
+  
   attr_reader :route, :number, :speed, :type, :wagons_list
   
   #варианты типа поезда
   TRAIN_TYPE = { :passenger => 'пассажирский', :freight => 'грузовой' }
   SPEED_CHANGE_VALUE = 10 #величина изменения скорости поезда, км\ч
 
-  def initialize( train_type = :passenger, wagons_list = {}, route = nil)
+  def initialize( train_type = :passenger, wagons_list = {}, route = nil, number = nil )
     
     @type = train_type
     @wagons_list = wagons_list
     @speed = 0
-    @number ||= object_id;
+    if(number.nil?)
+      @number = self.object_id;
+    else
+      @number = number;
+    end
     @route = route
     @current_station = route.get_route_start unless route.nil? #завожу для экономии времени на процедуру перебора всех станций
   end

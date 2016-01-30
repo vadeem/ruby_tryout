@@ -13,6 +13,21 @@ podlipki_station  = RailwayStation.new('Podlipki')
 puts bolshevo_station.name, monino_station.name, podlipki_station.name
 puts
 
+puts 'выведем список всех станций'
+puts RailwayStation.all
+
+puts 'меняем для Монино номер станции (по умолчанию object_id)'
+puts monino_station.change_number(12)
+puts 'и снова выведем список всех станций'
+puts RailwayStation.all
+
+puts 'найдём станциюю Монино, по её названию номеру - 12 '
+puts RailwayStation.find(12).name
+puts
+puts 'посмотрим сколько у нас всего станций'
+puts RailwayStation.instances
+puts
+
 #путь
 puts 'ПУТЬ'
 route = Route.new(bolshevo_station, monino_station)
@@ -46,6 +61,11 @@ puts 'ПОЕЗДА: грузовой'
 tr = CargoTrain.new() #попробуем три вагона
 puts tr
 puts Train::TRAIN_TYPE[tr.type]
+puts 'установим для первого, грузового поезда название производителя - РЖД'
+tr.manufacturer = 'RZHD';
+puts 'проверим'
+puts tr.manufacturer
+puts
 
 puts 'добавим вагон в грузовой состав'
 tr.add_wagon
@@ -91,7 +111,7 @@ tr2.set_route(route)
 
 #проверка кто из поездов (по номерам) находится на первой станции
 route.get_route_start.show_trains
-puts
+puts ''
 
 #грузовой едет в подлипки и обратно
 puts 'грузовой'

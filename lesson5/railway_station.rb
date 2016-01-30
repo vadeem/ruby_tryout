@@ -1,10 +1,22 @@
 require_relative 'train.rb'
+require_relative 'all_finder.rb'
 
 class RailwayStation
+
+  include AllFinder
+  
   attr_accessor  :name, :trains_list
-  def initialize( name )
+  attr_reader :number
+  
+  def initialize( name, number = nil)
     @name = name
     @trains_list = Hash.new(nil)
+    if(number.nil?)
+      @number = self.object_id;
+    else
+      @number = number;
+    end
+    self.add_one_instance(self)
   end
   
   #метод показывает список поездов по типу или (если тип не указать) список всех поездов
@@ -46,4 +58,7 @@ class RailwayStation
 		end
   end
 	
+  private
+  attr_writer :number
+  
 end
