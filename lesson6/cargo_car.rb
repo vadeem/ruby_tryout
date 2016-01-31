@@ -2,14 +2,13 @@ require_relative 'car.rb'
 
 class CargoCar < Car
   
-  AVAILABLE_FOR = [:freight] # train
+  AVAILABLE_FOR = :freight # train
 
   attr_reader :tonnage, :cargo_weight
   
-  public
-  def initialize(tonnage = 20, cargo_weight = 0)
-    super( :freight )
-    @cargo_weight   = 0 
+  def initialize(number, tonnage = 20, cargo_weight = 0)
+    super( AVAILABLE_FOR,  number )
+    @cargo_weight   = cargo_weight 
     @tonnage        = tonnage
   end
   

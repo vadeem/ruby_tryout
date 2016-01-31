@@ -6,13 +6,23 @@ class Car
   
   attr_reader :number, :type
 
-  def initialize(type = nil, number = nil)
-    if(number.nil?)
-      @number = self.object_id;
-    else
-      @number = number;
-    end
+  def initialize(type, number)
+    @number = number;
     @type = type#тип вагона
+    valid?
   end
 
+  def valid?
+    validate!
+  rescue
+    false
+  end
+  
+  protected
+  def validate!
+    raise "Номер должен быть длиннее 5 символов" if number.length < 6
+    raise "Тип не должен быть nil" if type.nil?
+    raise "Неверный тип предназначения" unless AVAILABLE_FOR == type
+    true
+  end
 end

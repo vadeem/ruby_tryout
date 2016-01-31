@@ -2,12 +2,12 @@ require_relative 'car.rb'
 
 class PassengerCar < Car 
 
-  AVAILABLE_FOR = [:passenger] # train
+  AVAILABLE_FOR = :passenger # train
 
   attr_reader   :boarding_places_count, :passengers_count
 
-  def initialize(boarding_places_count = 30)
-    super
+  def initialize(number, boarding_places_count = 30)
+    super(AVAILABLE_FOR, number)
     @passengers_count       = 0 
     @boarding_places_count  = boarding_places_count
   end

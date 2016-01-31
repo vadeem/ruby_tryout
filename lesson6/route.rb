@@ -11,7 +11,7 @@ class Route
   	end
   	
   	@stations_list << last_station
-  	
+  	valid?
   end
   
   def get_route_end
@@ -44,7 +44,7 @@ class Route
     unless result.nil?
       return result
     else
-      puts "#{prev_station.name} - конечная"
+      prev_station.name
     end
   end
   
@@ -60,7 +60,7 @@ class Route
     unless result.nil?
       return result
     else
-      puts "#{prev_station.name} - первая станция этого маршрута"
+      prev_station.name
     end
   end
   
@@ -78,4 +78,23 @@ class Route
 
   private #чтобы меняли список только методами
   attr_accessor :stations_list
+  
+  def valid?
+    validate!
+  rescue
+    false
+  end
+  
+  private 
+  #раз у нас есть функции добавить и убрать станцию из пути, надо сделать список станций приватным, 
+  #а раз список станций приватный, пришлось добавить функции - get_next_station и get_previous_station, так как поездам нужно иметь возможность получить станции
+  attr_accessor :stations_list
+  
+  protected
+  def validate!
+    raise "Список станций пути должен содержать не менее двух станций" if station_list.length < 2
+    station_list.each{|station| raise "Один из объектов не является экземпляром класса Станция" unless station.class == 'RailwayStation'}
+    true
+  end
+
 end

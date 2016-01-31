@@ -8,15 +8,12 @@ class RailwayStation
   attr_accessor  :name, :trains_list
   attr_reader :number
   
-  def initialize( name, number = nil)
+  def initialize( name )
     @name = name
     @trains_list = Hash.new(nil)
-    if(number.nil?)
-      @number = self.object_id;
-    else
-      @number = number;
-    end
+    @number = self.object_id;
     self.add_one_instance(self)
+    valid?
   end
   
   #метод показывает список поездов по типу или (если тип не указать) список всех поездов
@@ -25,19 +22,17 @@ class RailwayStation
     if trains_list.any?
       trains_list.each do |train_id, train|
         if type.nil? 
-  		    puts "На станции находится поезд № #{train_id}"
+          train_id
   		  elsif( train.type == type)
   			  no_trains = false
-  				puts "На станции находится #{Train::TRAIN_TYPE[train.type]} поезд № #{train_id} " if train.type == type
+          train_id if train.type == type
   		  end
       end
     end
-    puts 'no trains at station now' if no_trains && ! type.nil?
   end
   
   def train_departure( train )
     self.trains_list.delete(train.number)
-    puts "Поезд №#{train.number} отбыл со станции #{name}"
   end
 
   def has_train?( train_id )
@@ -51,14 +46,23 @@ class RailwayStation
   def accept_train( train )
     unless self.trains_list[train.number]
       self.trains_list[train.number] = train
-      puts "Поезд №#{train.number} прибыл на станцию #{name}"
     else
       self.trains_list[train.number]
-      puts "Поезд №#{train.number} уже находится на станции #{name}"
 		end
+  end
+  
+  def valid?
+    validate!
+  rescue
+    false
   end
 	
   private
   attr_writer :number
   
+  protected
+  def validate!
+    raise "Название не должно быть Nil" if name.nil?
+    true
+  end
 end
